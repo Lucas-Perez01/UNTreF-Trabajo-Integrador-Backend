@@ -1,0 +1,29 @@
+{
+  "name": "untref-trabajo-integrador-backend",
+  "version": "1.0.0",
+  "description": "¡Hola a todos!",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "dev": "--watch app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lucas-Perez01/UNTreF-Trabajo-Integrador-Backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lucas-Perez01/UNTreF-Trabajo-Integrador-Backend/issues"
+  },
+  "homepage": "https://github.com/Lucas-Perez01/UNTreF-Trabajo-Integrador-Backend#readme",
+  "dependencies": {
+    "dotenv": "^17.0.0",
+    "express": "^5.1.0",
+    "jest": "^30.0.3",
+    "mongoose": "^8.16.1"
+  }
+}
