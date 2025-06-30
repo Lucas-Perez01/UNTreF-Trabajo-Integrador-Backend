@@ -28,4 +28,28 @@ const productoPorCodigo = async (req, res) => {
   }
 };
 
-export { getProductos, productoPorCodigo };
+//Funcion para crear un producto
+const crearProducto = async (req, res) => {
+  try {
+    //Validamos que el codigo del producto no exista en la base de datos/ que sea diferente
+    const productoYaExiste = await Productos.findOne({ codigo });
+    if (productoYaExiste) {
+      return res.status(400).json({
+        message: "El producto ya existe con ese código",
+      });
+    }
+
+    //Creamos el nuevo producto
+    const nuevoProducto = new Productos(req.body);
+    await nuevoProducto.save();
+    //Si el producto es creado se retorna con un codigo de estado 201
+    return res.status(201).json(nuevoProducto);
+    // Si hay un error al crear el producto, se retorna un codigo de estado 400
+  } catch (error) {
+    return res.status(400).json({
+      message: "Error al crear el producto",
+    });
+  }
+};
+
+export { getProductos, productoPorCodigo, crearProducto };
