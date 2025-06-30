@@ -52,4 +52,24 @@ const crearProducto = async (req, res) => {
   }
 };
 
-export { getProductos, productoPorCodigo, crearProducto };
+//Funcion para modificar un producto
+const modificarProducto = async (req, res) => {
+  const { codigo } = req.params;
+  const { precio } = req.body;
+  try {
+    const productoModificado = await Productos.findOneAndUpdate(
+      { codigo },
+      { precio }
+    );
+    if (!productoModificado) {
+      return res.status(404).json({ message: "Producto no encontrado" });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error interno del servidor al modificar el producto",
+    });
+  }
+  return res.status(200).json({ message: "Producto modificado correctamente" });
+};
+
+export { getProductos, productoPorCodigo, crearProducto, modificarProducto };
