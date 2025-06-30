@@ -31,6 +31,7 @@ const productoPorCodigo = async (req, res) => {
 //Funcion para crear un producto
 const crearProducto = async (req, res) => {
   try {
+    const { codigo } = req.body;
     //Validamos que el codigo del producto no exista en la base de datos/ que sea diferente
     const productoYaExiste = await Productos.findOne({ codigo });
     if (productoYaExiste) {
