@@ -72,4 +72,25 @@ const modificarProducto = async (req, res) => {
   return res.status(200).json({ message: "Producto modificado correctamente" });
 };
 
-export { getProductos, productoPorCodigo, crearProducto, modificarProducto };
+const borrarProducto = async (req, res) => {
+  const { codigo } = req.params;
+  try {
+    const productoBorrado = await Productos.findOneAndDelete({ codigo });
+    if (!productoBorrado) {
+      return res.status(404).json({ message: "Producto no encontrado" });
+    }
+    return res.status(200).json({ message: "Producto borrado correctamente" });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error interno del servidor al modificar el producto",
+    });
+  }
+};
+
+export {
+  getProductos,
+  productoPorCodigo,
+  crearProducto,
+  modificarProducto,
+  borrarProducto,
+};
