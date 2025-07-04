@@ -32,7 +32,7 @@ const productoPorCodigo = async (req, res) => {
 const crearProducto = async (req, res) => {
   try {
     const { codigo } = req.body;
-    // Validamos que el codigo del producto no exista en la base de datos/ que sea diferente
+    // Validamos que el código del producto no exista en la base de datos/ que sea diferente
     const productoYaExiste = await Productos.findOne({ codigo });
     if (productoYaExiste) {
       return res.status(400).json({
@@ -120,6 +120,36 @@ const buscarProductoPorTermino = async (req, res) => {
   }
 };
 
+// Función para filtra los productos que pertenezcan a una categoría específica.
+const filtrarProductoPorCategoria = async (req, res) => {
+  const nombre = req.params.nombre.toLowerCase();
+
+  if (!nombre) {
+    return res
+      .status(400)
+      .json({ mensaje: "No se ingresó el parámetro categoria!" });
+  }
+
+  try {
+    const productos = await Productos.find({
+      categoria: { $regex: nombre, $options: "i" },
+    });
+
+    if (!productos || productos.length === 0) {
+      return res
+        .status(404)
+        .json({ mensaje: "No existe un producto con esa categoría!" });
+    }
+
+    return res.status(200).json(productos);
+  } catch (error) {
+    return res.status(500).json({
+      mensaje: "Error al buscar productos por categoría",
+      error,
+    });
+  }
+};
+
 export {
   getProductos,
   productoPorCodigo,
@@ -127,4 +157,5 @@ export {
   modificarProducto,
   borrarProducto,
   buscarProductoPorTermino,
+  filtrarProductoPorCategoria,
 };

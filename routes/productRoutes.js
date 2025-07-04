@@ -6,6 +6,7 @@ import {
   modificarProducto,
   borrarProducto,
   buscarProductoPorTermino,
+  filtrarProductoPorCategoria,
 } from "../controllers/productController.js";
 
 const router = express.Router();
@@ -27,5 +28,8 @@ router.put("/productos/:codigo", modificarProducto);
 
 // Ruta para borrar un producto por su código
 router.delete("/productos/:codigo", borrarProducto);
+
+// Ruta para filtrar los productos que pertenezcan a una categoria especifica
+router.get("/productos/categoria/:nombre", filtrarProductoPorCategoria);
 
 export default router;
