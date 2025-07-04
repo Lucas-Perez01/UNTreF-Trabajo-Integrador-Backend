@@ -1,14 +1,14 @@
 // Crud de los productos
 import Productos from "../models/product.js";
 
-//Funcion para tomar todos los productos de la base de datos
+// Función para tomar todos los productos de la base de datos
 const getProductos = async (req, res) => {
   try {
     const productos = await Productos.find();
     return res.status(200).json(productos);
   } catch (error) {
     res.status(500)({
-      message: "Error al obtener los productos de la base de datos",
+      mensaje: "Error al obtener los productos de la base de datos",
     });
   }
 };
@@ -18,42 +18,42 @@ const productoPorCodigo = async (req, res) => {
   try {
     const producto = await Productos.findOne({ codigo });
     if (!producto) {
-      return res.status(404).json({ message: "Producto no encontrado" });
+      return res.status(404).json({ mensaje: "Producto no encontrado" });
     }
     return res.status(200).json(producto);
   } catch (error) {
     return res.status(500).json({
-      message: "Error al obtener el producto por su código",
+      mensaje: "Error al obtener el producto por su código",
     });
   }
 };
 
-//Funcion para crear un producto
+// Función para crear un producto
 const crearProducto = async (req, res) => {
   try {
     const { codigo } = req.body;
-    //Validamos que el codigo del producto no exista en la base de datos/ que sea diferente
+    // Validamos que el codigo del producto no exista en la base de datos/ que sea diferente
     const productoYaExiste = await Productos.findOne({ codigo });
     if (productoYaExiste) {
       return res.status(400).json({
-        message: "El producto ya existe con ese código",
+        mensaje: "El producto ya existe con ese código",
       });
     }
 
-    //Creamos el nuevo producto
+    // Creamos el nuevo producto
     const nuevoProducto = new Productos(req.body);
     await nuevoProducto.save();
-    //Si el producto es creado se retorna con un codigo de estado 201
+    // Si el producto es creado se retorna con un codigo de estado 201
     return res.status(201).json(nuevoProducto);
     // Si hay un error al crear el producto, se retorna un codigo de estado 400
   } catch (error) {
     return res.status(400).json({
-      message: "Error al crear el producto",
+      mensaje: "Error al crear el producto",
     });
   }
 };
 
-//Funcion para modificar un producto
+// Función para modificar un producto
 const modificarProducto = async (req, res) => {
   const { codigo } = req.params;
   const { precio } = req.body;
@@ -63,28 +63,60 @@ const modificarProducto = async (req, res) => {
       { precio }
     );
     if (!productoModificado) {
-      return res.status(404).json({ message: "Producto no encontrado" });
+      return res.status(404).json({ mensaje: "Producto no encontrado" });
     }
   } catch (error) {
     return res.status(500).json({
-      message: "Error interno del servidor al modificar el producto",
+      mensaje: "Error interno del servidor al modificar el producto",
     });
   }
-  return res.status(200).json({ message: "Producto modificado correctamente" });
+  return res.status(200).json({ mensaje: "Producto modificado correctamente" });
 };
 
+// Función para borrar un producto
 const borrarProducto = async (req, res) => {
   const { codigo } = req.params;
   try {
     const productoBorrado = await Productos.findOneAndDelete({ codigo });
     if (!productoBorrado) {
-      return res.status(404).json({ message: "Producto no encontrado" });
+      return res.status(404).json({ mensaje: "Producto no encontrado" });
     }
-    return res.status(200).json({ message: "Producto borrado correctamente" });
+    return res.status(200).json({ mensaje: "Producto borrado correctamente" });
   } catch (error) {
     return res.status(500).json({
-      message: "Error interno del servidor al modificar el producto",
+      mensaje: "Error interno del servidor al modificar el producto",
     });
+  }
+};
+
+/* ----------------------
+   Funciones adicionales
+   ----------------------*/
+
+// Función para buscar un producto por su nombre
+const buscarProductoPorTermino = async (req, res) => {
+  const { q } = req.query;
+
+  if (!q) {
+    return res.status(400).json({ mensaje: "No se ingresó el parámetro q!" });
+  }
+
+  try {
+    const productosEncontrados = await Productos.find({
+      nombre: { $regex: q, $options: "i" },
+    });
+
+    if (productosEncontrados.length === 0) {
+      return res
+        .status(404)
+        .json({ mensaje: "No existe un producto con ese nombre!" });
+    }
+
+    return res.status(200).json(productosEncontrados);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ mensaje: "Error al buscar productos", error });
   }
 };
 
@@ -94,4 +126,5 @@ export {
   crearProducto,
   modificarProducto,
   borrarProducto,
+  buscarProductoPorTermino,
 };
