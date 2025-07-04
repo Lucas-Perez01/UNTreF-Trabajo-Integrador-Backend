@@ -150,6 +150,34 @@ const filtrarProductoPorCategoria = async (req, res) => {
   }
 };
 
+// Función para obtener los productos que se encuentren en un rango de precio específico.
+const obtenerProductosEnUnRangoDePrecio = async (req, res) => {
+  const min = Number(req.params.min);
+  const max = Number(req.params.max);
+
+  if (isNaN(min) || isNaN(max)) {
+    return res.status(404).json("Parametros min y max invalidos");
+  }
+
+  try {
+    const productos = await Productos.find({
+      precio: { $gte: min, $lte: max },
+    });
+
+    if (productos.length === 0) {
+      return res
+        .status(404)
+        .json({ mensaje: "No se encontraron productos en ese rango" });
+    }
+
+    return res.status(200).json(productos);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ mensaje: "Error al obtener el producto por rango" });
+  }
+};
+
 export {
   getProductos,
   productoPorCodigo,
@@ -158,4 +186,5 @@ export {
   borrarProducto,
   buscarProductoPorTermino,
   filtrarProductoPorCategoria,
+  obtenerProductosEnUnRangoDePrecio,
 };
