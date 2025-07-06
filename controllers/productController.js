@@ -178,6 +178,40 @@ const obtenerProductosEnUnRangoDePrecio = async (req, res) => {
   }
 };
 
+// Función gregar múltiples productos en una sola solicitud.
+const agregarMasivamente = async (req, res) => {
+  const productos = req.body;
+
+  if (!Array.isArray(productos) || productos.length === 0) {
+    return res.status(400).json({ mensaje: "Productos debe ser un array" });
+  }
+
+  try {
+    const codigos = productos.map((p) => p.codigo);
+    const productosExistentes = await Productos.find({
+      codigo: { $in: codigos },
+    });
+    const codigosExistentes = productosExistentes.map((p) => p.codigo);
+
+    const productosFiltrados = productos.filter(
+      (p) => !codigosExistentes.includes(p.codigo)
+    );
+
+    if (productosFiltrados.length === 0) {
+      return res
+        .status(409)
+        .json({ mensaje: "Todos los productos ya existen" });
+    }
+
+    await Productos.insertMany(productosFiltrados);
+    return res
+      .status(201)
+      .json({ mensaje: "Productos insertados exitosamente" });
+  } catch (error) {
+    return res.status(500).json({ mensaje: "Error al agregar productos" });
+  }
+};
+
 export {
   getProductos,
   productoPorCodigo,
@@ -187,4 +221,5 @@ export {
   buscarProductoPorTermino,
   filtrarProductoPorCategoria,
   obtenerProductosEnUnRangoDePrecio,
+  agregarMasivamente,
 };

@@ -8,6 +8,7 @@ import {
   buscarProductoPorTermino,
   filtrarProductoPorCategoria,
   obtenerProductosEnUnRangoDePrecio,
+  agregarMasivamente,
 } from "../controllers/productController.js";
 
 const router = express.Router();
@@ -35,5 +36,8 @@ router.get("/productos/categoria/:nombre", filtrarProductoPorCategoria);
 
 // Ruta para devolver los productos dentro de un rango de precio
 router.get("/productos/precio/:min-:max", obtenerProductosEnUnRangoDePrecio);
+
+// Ruta para crear productos masivamente
+router.post("/productos/masivo", agregarMasivamente);
 
 export default router;
