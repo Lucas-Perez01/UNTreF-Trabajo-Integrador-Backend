@@ -1,16 +1,18 @@
+// Importamos la dependencia de express y los controladores necesatrios
 import express from "express";
 import {
-  getProductos,
-  productoPorCodigo,
-  crearProducto,
-  modificarProducto,
-  borrarProducto,
-  buscarProductoPorTermino,
-  filtrarProductoPorCategoria,
-  obtenerProductosEnUnRangoDePrecio,
-  agregarMasivamente,
+  getProductos, // Obtenemos todos los productos
+  productoPorCodigo, // Obtenemos un producto por su codigo
+  crearProducto, // Creamos un nuevo producto
+  modificarProducto, // Editamos un producto existente por su codigo
+  borrarProducto, // Borramos un producto por su codigo
+  buscarProductoPorTermino, // Buscamos un producto por un termino
+  filtrarProductoPorCategoria, // Filtramos productos por categoria
+  obtenerProductosEnUnRangoDePrecio, // Obtenemos productos en un rango de precio
+  agregarMasivamente, // Agregamos prodcutos masivamente
 } from "../controllers/productController.js";
 
+// Creamos un router de express
 const router = express.Router();
 
 // Ruta para obtener todos los productos
@@ -40,4 +42,5 @@ router.get("/productos/precio/:min-:max", obtenerProductosEnUnRangoDePrecio);
 // Ruta para crear productos masivamente
 router.post("/productos/masivo", agregarMasivamente);
 
+// Exportamos router
 export default router;
