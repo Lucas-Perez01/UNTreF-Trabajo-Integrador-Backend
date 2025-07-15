@@ -1,24 +1,24 @@
-// Importamos la depedencia de mongoose
+// Importamos la dependencia de mongoose
 import mongoose from "mongoose";
 
 // Definimos el esquema para los productos
 const ProductoSchema = new mongoose.Schema({
-  // Campo para el codigo del producto de tipo Number
+  // Código del producto (tipo: Number)
   codigo: {
     type: Number,
     required: true,
   },
-  // Campo para el nombre del producto de tipo String
+  // Nombre del producto (tipo: String)
   nombre: {
     type: String,
     required: true,
   },
-  // Campo para el precio del producto de tipo Number
+  // Precio del producto (tipo: Number)
   precio: {
     type: Number,
     required: true,
   },
-  // Campo para la categoria del producto de tipo Array de Strings
+  // Categorías del producto (tipo: Array de Strings)
   categoria: {
     type: [String],
     required: true,

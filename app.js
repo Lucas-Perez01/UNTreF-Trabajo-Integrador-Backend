@@ -1,4 +1,4 @@
-// Importamos dependencias)
+// Importamos dependencias
 import express from "express";
 import mongoConnect from "./config/database.js";
 import productosRoutes from "./routes/productRoutes.js";
@@ -20,11 +20,11 @@ app.use(express.json());
 // Middleware para agregarle un prefijo a las rutas de los productos
 app.use("/api", productosRoutes);
 
-// Ruta de prueba
+// Ruta de prueba para verificar que el servidor está funcionando
 app.get("/", (req, res) => {
   res.send("Bienvenido a la API de UNTreF Trabajo Integrador");
 });
-// Escucha del servidor en el puerto especificado
+// Inicio del servidor en el puerto especificado
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });

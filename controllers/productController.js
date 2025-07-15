@@ -4,11 +4,11 @@ import Productos from "../models/product.js";
 // Función para obtener todos los productos de la base de datos
 const getProductos = async (req, res) => {
   try {
-    const productos = await Productos.find(); // Buscamos los productos
-    return res.status(200).json(productos); // Respondemos con la lista de los productos
+    const productos = await Productos.find();
+    return res.status(200).json(productos); // Retornamos la lista de los productos
   } catch (error) {
     // Manejamos el error
-    res.status(500)({
+    res.status(500).json({
       mensaje: "Error al obtener los productos de la base de datos",
     });
   }
@@ -36,8 +36,7 @@ const productoPorCodigo = async (req, res) => {
 const crearProducto = async (req, res) => {
   try {
     const { codigo } = req.body;
-    // Validamos que el código del producto no exista en la base de datos/que sea diferente
-    // Si el producto ya existe retornamos un error 400
+    // Validamos que el código del producto no exista en la base de datos
     const productoYaExiste = await Productos.findOne({ codigo });
     if (productoYaExiste) {
       return res.status(400).json({
@@ -49,8 +48,8 @@ const crearProducto = async (req, res) => {
     const nuevoProducto = new Productos(req.body);
     await nuevoProducto.save(); // Guardamos el nuevo producto en la base de datos
     return res.status(201).json(nuevoProducto); // Si el producto es creado se retorna con un codigo de estado 201
-    // Si hay un error al crear el producto, se retorna un codigo de estado 400
   } catch (error) {
+    // Retornamos 400 si hay error al crear el producto
     // Manejamos el error
     return res.status(400).json({
       mensaje: "Error al crear el producto",
@@ -92,7 +91,7 @@ const borrarProducto = async (req, res) => {
     if (!productoBorrado) {
       return res.status(404).json({ mensaje: "Producto no encontrado" });
     }
-    // Retornamos 200 con un mensaje de que el prodcuto se borro correctamente
+    // Retornamos 200 con un mensaje de que el producto se borro correctamente
     return res.status(200).json({ mensaje: "Producto borrado correctamente" });
   } catch (error) {
     // Manejamos el error
@@ -116,7 +115,7 @@ const buscarProductoPorTermino = async (req, res) => {
   }
 
   try {
-    // Buscamos los productos por una expresion regular
+    // Buscamos productos donde el nombre coincida parcialmente
     const productosEncontrados = await Productos.find({
       nombre: { $regex: q, $options: "i" },
     });
@@ -128,7 +127,7 @@ const buscarProductoPorTermino = async (req, res) => {
         .json({ mensaje: "No existe un producto con ese nombre!" });
     }
 
-    // Retornamos el producto encontrado
+    // Retornamos los productos encontrados
     return res.status(200).json(productosEncontrados);
   } catch (error) {
     // Manejamos el error
@@ -142,7 +141,7 @@ const buscarProductoPorTermino = async (req, res) => {
 const filtrarProductoPorCategoria = async (req, res) => {
   const nombre = req.params.nombre.toLowerCase(); // Convertimos el parametro a minusculas
 
-  // Verificamos que el parametro se ingreso
+  // Verificamos que el parámetro fue ingresado
   if (!nombre) {
     return res
       .status(400)
@@ -155,7 +154,7 @@ const filtrarProductoPorCategoria = async (req, res) => {
       categoria: { $regex: nombre, $options: "i" },
     });
 
-    // Retornamos 404 si el producto no existe con esa categoria
+    // Retornamos 404 si no existen porductos
     if (!productos || productos.length === 0) {
       return res
         .status(404)
@@ -171,7 +170,7 @@ const filtrarProductoPorCategoria = async (req, res) => {
   }
 };
 
-// Función para obtener los productos que se encuentren en un rango de precio específico.
+// Función para obtener los productos que se encuentren en un rango de precio especifico.
 const obtenerProductosEnUnRangoDePrecio = async (req, res) => {
   const min = Number(req.params.min);
   const max = Number(req.params.max);
@@ -193,7 +192,7 @@ const obtenerProductosEnUnRangoDePrecio = async (req, res) => {
         .status(404)
         .json({ mensaje: "No se encontraron productos en ese rango" });
     }
-    return res.status(200).json(productos); // Retornamos los prodcutos
+    return res.status(200).json(productos); // Retornamos los productos
   } catch (error) {
     // Manejamos el error
     return res
@@ -212,7 +211,7 @@ const agregarMasivamente = async (req, res) => {
   }
 
   try {
-    const codigos = productos.map((p) => p.codigo); // Obtenemos todos los del array recibido
+    const codigos = productos.map((p) => p.codigo); // Obtenemos los códigos de los productos del array recibido
     const productosExistentes = await Productos.find({
       // Buscamos cuales existen en la base de datos
       codigo: { $in: codigos },
@@ -220,7 +219,7 @@ const agregarMasivamente = async (req, res) => {
     const codigosExistentes = productosExistentes.map((p) => p.codigo);
 
     const productosFiltrados = productos.filter(
-      // Filtramos los productos los productos que no esten repetidos
+      // Filtramos los productos que no esten repetidos
       (p) => !codigosExistentes.includes(p.codigo)
     );
 

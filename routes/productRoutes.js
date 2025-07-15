@@ -1,15 +1,15 @@
-// Importamos la dependencia de express y los controladores necesatrios
+// Importamos la dependencia de express y los controladores necesarios
 import express from "express";
 import {
-  getProductos, // Obtenemos todos los productos
-  productoPorCodigo, // Obtenemos un producto por su codigo
-  crearProducto, // Creamos un nuevo producto
-  modificarProducto, // Editamos un producto existente por su codigo
-  borrarProducto, // Borramos un producto por su codigo
-  buscarProductoPorTermino, // Buscamos un producto por un termino
-  filtrarProductoPorCategoria, // Filtramos productos por categoria
-  obtenerProductosEnUnRangoDePrecio, // Obtenemos productos en un rango de precio
-  agregarMasivamente, // Agregamos prodcutos masivamente
+  getProductos, // Obtener todos los productos
+  productoPorCodigo, // Obtener un producto por su código
+  crearProducto, // Crear un nuevo producto
+  modificarProducto, // Editar un producto existente por su código
+  borrarProducto, // Borrar un producto por su código
+  buscarProductoPorTermino, // Buscar productos por un término
+  filtrarProductoPorCategoria, // Filtrar productos por categoría
+  obtenerProductosEnUnRangoDePrecio, // Obtener productos en un rango de precio
+  agregarMasivamente, // Agregar productos masivamente
 } from "../controllers/productController.js";
 
 // Creamos un router de express
@@ -18,7 +18,7 @@ const router = express.Router();
 // Ruta para obtener todos los productos
 router.get("/productos", getProductos);
 
-// Ruta para buscar productos por termino
+// Ruta para buscar productos por término
 router.get("/productos/buscar", buscarProductoPorTermino);
 
 // Ruta para obtener un producto por su código
@@ -33,14 +33,14 @@ router.put("/productos/:codigo", modificarProducto);
 // Ruta para borrar un producto por su código
 router.delete("/productos/:codigo", borrarProducto);
 
-// Ruta para filtrar los productos que pertenezcan a una categoria especifica
+// Ruta para filtrar productos por categoría específica
 router.get("/productos/categoria/:nombre", filtrarProductoPorCategoria);
 
-// Ruta para devolver los productos dentro de un rango de precio
+// Ruta para obtener productos dentro de un rango de precio
 router.get("/productos/precio/:min-:max", obtenerProductosEnUnRangoDePrecio);
 
-// Ruta para crear productos masivamente
+// Ruta para agregar productos masivamente
 router.post("/productos/masivo", agregarMasivamente);
 
-// Exportamos router
+// Exportamos el router
 export default router;
